@@ -1,40 +1,44 @@
 package gettingstarted
 
-import org.scalatest.{FlatSpec}
+import org.scalatest.prop._
+import org.scalatest.FlatSpec
 
 
-class SortedTest extends FlatSpec {
+class SortedTest extends FlatSpec with GeneratorDrivenPropertyChecks {
   import Sorted.isSorted
 
   def isOrdered(a: Int, b: Int) = if(a <= b) true else false
 
   def testOrderingOf = isSorted(_:Array[Int], isOrdered)
 
-  "The Array(1,2,2,3,3,3)" should "test as sorted" in {
-        assert(testOrderingOf(Array(1,2,2,3,3,3)) == true)
+  "Generated arrays" should "be flagged as sorted when ordered" in {
+    forAll { (a: Int, b: Int, c: Int, d: Int) =>
+      val arrayToTest = Array(a,b,c,d)
+      println(arrayToTest.mkString(","))
+      if(a <= b && b <= c && c <= d) {
+        assert(testOrderingOf(arrayToTest) == true)
+      } else {
+        assert(testOrderingOf(arrayToTest) === false)
+      }
+    }
   }
 
-  "The Array(1,1,1)" should "test as sorted" in {
-    assert(testOrderingOf(Array(1,1,1)) == true)
+  "Generated arrays of the same element" should "be declared ordered" in {
+    forAll { n:Int =>
+      val arrayToTest = Array(n,n,n,n,n)
+      assert(testOrderingOf(arrayToTest) == true)
+    }
   }
 
-  "The Array(1)" should "test as sorted" in {
-    assert(testOrderingOf(Array(1)) == true)
+  "Single element arrays" should "be ordered" in {
+    forAll { n:Int =>
+      assert(testOrderingOf(Array(n)) == true)
+    }
   }
-
 
   "The Array[Int]()" should "test as sorted" in {
     val empty:Array[Int] = Array[Int]()
     assert(testOrderingOf(empty) == true)
   }
-
-  "The Array(1,2,3,4,5,5,4,7" should "test as not sorted" in {
-    assert(testOrderingOf(Array(1,2,3,4,5,5,4,7)) == false)
-  }
-
-  "The Array(2,1)" should "test as not sorted" in {
-    assert(testOrderingOf(Array(2,1)) == false)
-  }
-
 
 }
