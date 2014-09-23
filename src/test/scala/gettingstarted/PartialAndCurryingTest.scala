@@ -7,6 +7,7 @@ class PartialAndCurryingTest extends FlatSpec {
   import gettingstarted.Currying.partial1
   import gettingstarted.Currying.curry
   import gettingstarted.Currying.compose
+  import gettingstarted.Currying.uncurry
 
   def add(a:Int, b:Int) : Int = a + b
   def printSum(sum: Int) : String = s"sum is $sum"
@@ -26,4 +27,11 @@ class PartialAndCurryingTest extends FlatSpec {
     val composed = compose(printSum, inc)
     assert(composed(3) === "sum is 4")
   }
+
+  "A curried function" can "be uncurried" in {
+    val curried = curry(add)
+    val uncurried = uncurry(curried)
+    assert(uncurried(40,2) === 42)
+  }
+
 }
