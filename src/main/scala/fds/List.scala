@@ -10,7 +10,6 @@ object List {
   def tail[A](l: List[A]): List[A] = {
     l match {
       case Nil => Nil
-      case Cons(_,Nil) => Nil
       case Cons(h, t) => t
     }
   }
@@ -21,4 +20,15 @@ object List {
       case Cons(previous, t) => Cons(h,t)
     }
   }
+
+  def drop[A](l:List[A], n: Int):List[A] = {
+    println(s"l is $l and n is $n")
+
+    if(n <= 0) l
+    else  l match {
+        case Nil => Nil
+        case Cons(h,t) => drop(t, n - 1)
+      }
+   }
+
 }

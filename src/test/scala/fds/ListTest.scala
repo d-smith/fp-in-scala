@@ -32,6 +32,11 @@ class ListTest extends WordSpec with MustMatchers {
         case _ => fail("unexpected content or structure for l2")
       }
     }
+
+    "allow a number of elements to be dropped" in {
+      val l: List[Int] = Cons(1, Cons(2, Cons(3,Nil)))
+      assert(List.drop(l, 2) === Cons(3,Nil))
+    }
   }
 
   "An empty list" must {
@@ -41,6 +46,10 @@ class ListTest extends WordSpec with MustMatchers {
 
     "produce a new single element list when setting the head" in {
       assert(List.setHead(1,Nil) === Cons(1, Nil))
+    }
+
+    "return Nil is asked to drop elements" in {
+      assert(List.drop(Nil, 10) === Nil)
     }
   }
 
@@ -58,6 +67,14 @@ class ListTest extends WordSpec with MustMatchers {
         case _ => fail("unexpected content or structure created via setHead")
       }
       
+    }
+
+    "produce Nil if dropping one or more elements" in {
+      assert(List.drop(Cons(1,Nil), 2) === Nil)
+    }
+
+    "produce itself if dropping no elements" in {
+      assert(List.drop(Cons(1,Nil),0) === Cons(1,Nil))
     }
 
   }
