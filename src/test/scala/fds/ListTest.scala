@@ -44,6 +44,17 @@ class ListTest extends WordSpec with MustMatchers {
       val dropped = List.dropWhile(l, f)
       assert(dropped === (Cons(2, Cons(1, Nil))))
     }
+
+    "can be reversed" in {
+      val l: List[Int] = Cons(3,Cons(2, Cons(1, Nil)))
+      assert(List.reverse(l) === Cons(1,Cons(2, Cons(3, Nil))))
+    }
+
+    "produce a new list minus the tail when used to init another list" in {
+      val l:List[Int] = Cons(3,Cons(2,Cons(1,Nil)))
+      val newList = List.init(l)
+      assert(newList === Cons(3, Cons(2, Nil)))
+    }
   }
 
   "An empty list" must {
@@ -61,6 +72,10 @@ class ListTest extends WordSpec with MustMatchers {
 
     "return Nil when dropWhile is called" in {
       assert(List.dropWhile(Nil, (x:Int) => true) === Nil)
+    }
+
+    "return Nil when initializing a list with Nil" in {
+      assert(List.init(Nil) === Nil)
     }
   }
 
@@ -97,6 +112,10 @@ class ListTest extends WordSpec with MustMatchers {
     "produce Nil when dropWhile predicate is true" in {
       val l:List[Int] = Cons(0,Nil)
       assert(List.dropWhile(l, (n:Int) => n == 0) === Nil)
+    }
+
+    "produce Nil when used to initialize another list" in {
+      assert(List.init(Cons(1,Nil)) === Nil)
     }
   }
 }
