@@ -39,9 +39,8 @@ class ListTest extends WordSpec with MustMatchers {
     }
 
     "drop items while a predicate is satisfied" in {
-      val f = (n: Int) => if(n > 2) true else false
       val l:List[Int] = Cons(4, Cons(3, Cons(2, Cons(1,Nil))))
-      val dropped = List.dropWhile(l, f)
+      val dropped = List.dropWhile(l)(n => if(n > 2) true else false)
       assert(dropped === (Cons(2, Cons(1, Nil))))
     }
 
@@ -71,7 +70,7 @@ class ListTest extends WordSpec with MustMatchers {
     }
 
     "return Nil when dropWhile is called" in {
-      assert(List.dropWhile(Nil, (x:Int) => true) === Nil)
+      assert(List.dropWhile(Nil)(x => true) === Nil)
     }
 
     "return Nil when initializing a list with Nil" in {
@@ -105,13 +104,13 @@ class ListTest extends WordSpec with MustMatchers {
 
     "produce itself is dropWhile predicate is false" in {
       val l:List[Int] = Cons(2, Nil)
-      val dropped = List.dropWhile(l, (x:Int) => x > 1000)
+      val dropped = List.dropWhile(l)(x => x > 1000)
       assert(dropped === l)
     }
 
     "produce Nil when dropWhile predicate is true" in {
       val l:List[Int] = Cons(0,Nil)
-      assert(List.dropWhile(l, (n:Int) => n == 0) === Nil)
+      assert(List.dropWhile(l)(n => n == 0) === Nil)
     }
 
     "produce Nil when used to initialize another list" in {
