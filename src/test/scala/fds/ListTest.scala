@@ -54,6 +54,16 @@ class ListTest extends WordSpec with MustMatchers {
       val newList = List.init(l)
       assert(newList === Cons(3, Cons(2, Nil)))
     }
+
+    "produce a sum using foldRight when it's a list of Int" in {
+      val l:List[Int] = Cons(3,Cons(2, Cons(1,Nil)))
+      assert(List.foldRight(l,0)(_ + _) === 6)
+    }
+
+    "have its length returned" in {
+      val l:List[String] = Cons("a",Cons("b", Cons("c",Nil)))
+      assert(List.length(l) === 3)
+    }
   }
 
   "An empty list" must {
@@ -75,6 +85,10 @@ class ListTest extends WordSpec with MustMatchers {
 
     "return Nil when initializing a list with Nil" in {
       assert(List.init(Nil) === Nil)
+    }
+
+    "have length 0" in {
+      assert(List.length(Nil) === 0)
     }
   }
 
