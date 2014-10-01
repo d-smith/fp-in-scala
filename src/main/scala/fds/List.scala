@@ -1,6 +1,7 @@
 package fds
 
 import scala.collection.mutable.ListBuffer
+import scala.annotation.tailrec
 
 sealed trait List[+A]
 case object Nil extends List[Nothing]
@@ -83,15 +84,17 @@ object List {
     }
   }
 
-  def length[A](l: List[A]) : Int = {
-    foldRight(l,0)((_,acc)=> acc + 1)
-  }
-
+  @tailrec
   def foldLeft[A,B](as: List[A], z: B)(f: (B, A) => B): B = {
     as match {
       case Nil => z
       case Cons(h,t) => foldLeft(t, f(z,h))(f)
     }
   }
+
+  def length[A](l: List[A]) : Int = foldLeft(l, 0:Int)((acc,_) => acc + 1)
+
+  def sum(l: List[Int]) : Int = foldLeft(l,0)(_+_)
+  def product(l:List[Double]) = foldLeft(l,1.0)(_*_)
 
 }

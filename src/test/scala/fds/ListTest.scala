@@ -69,6 +69,11 @@ class ListTest extends WordSpec with MustMatchers {
       val l:List[String] = Cons("a",Cons("b", Cons("c",Nil)))
       assert(List.length(l) === 3)
     }
+
+    "produce a product when it's a list of Double" in {
+      val l:List[Double] = Cons(3.0,Cons(2.0,Cons(1.0,Nil)))
+      assert(List.product(l) === 6.0)
+    }
   }
 
   "An empty list" must {
