@@ -104,6 +104,10 @@ class ListTest extends WordSpec with MustMatchers {
     "sum to zero via foldLeft" in {
       assert(List.foldLeft(Nil:List[Int],0)(_ + _) === 0)
     }
+
+    "produce Nil when reversed" in {
+      assert(List.reverse(Nil) === Nil)
+    }
   }
 
   "A single element list" must {
@@ -147,6 +151,10 @@ class ListTest extends WordSpec with MustMatchers {
 
     "Sum to the single value present in an Int list" in {
       assert(List.foldLeft(Cons(3,Nil),0)(_+_) === 3)
+    }
+
+    "produce itself when reversed" in {
+      assert(List.reverse(Cons(1,Nil)) === Cons(1,Nil))
     }
   }
 }

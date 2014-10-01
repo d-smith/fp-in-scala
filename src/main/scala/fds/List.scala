@@ -41,28 +41,6 @@ object List {
     }
   }
 
-  //needed a little help with init
-  def reverse[A](l: List[A]) : List[A] = {
-    def collectValues(acc: ListBuffer[A], l: List[A]): ListBuffer[A] = {
-      l match {
-        case Nil => acc
-        case Cons(h,t) => acc += h; collectValues(acc, t)
-      }
-    }
-    def listFromReverse[A](b: ListBuffer[A]) : List[A] = {
-      def listFromReversedR[A](b:ListBuffer[A], l: List[A]): List[A] = {
-        if(b.isEmpty) l
-        else {
-          val h = b.head
-          listFromReversedR(b.drop(1), Cons(h,l))
-        }
-      }
-      listFromReversedR(b,Nil)
-    }
-    val listVals = collectValues(new ListBuffer(), l)
-    listFromReverse(listVals)
-  }
-
   //create a list with all but the last element of the seed list
   def init[A](l:List[A]) : List[A] = {
 
@@ -96,5 +74,9 @@ object List {
 
   def sum(l: List[Int]) : Int = foldLeft(l,0)(_+_)
   def product(l:List[Double]) = foldLeft(l,1.0)(_*_)
+
+  def reverse[A](l:List[A]) : List[A] = {
+    foldLeft(l, List[A]())((acc,h) => Cons(h, acc))
+  }
 
 }
