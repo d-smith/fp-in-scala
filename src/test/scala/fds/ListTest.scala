@@ -60,6 +60,11 @@ class ListTest extends WordSpec with MustMatchers {
       assert(List.foldRight(l,0)(_ + _) === 6)
     }
 
+    "produce a sum using foldLeft when it's a list of Int" in {
+      val l:List[Int] = Cons(3,Cons(2, Cons(1,Nil)))
+      assert(List.foldLeft(l,0)(_ + _) === 6)
+    }
+
     "have its length returned" in {
       val l:List[String] = Cons("a",Cons("b", Cons("c",Nil)))
       assert(List.length(l) === 3)
@@ -89,6 +94,10 @@ class ListTest extends WordSpec with MustMatchers {
 
     "have length 0" in {
       assert(List.length(Nil) === 0)
+    }
+
+    "sum to zero via foldLeft" in {
+      assert(List.foldLeft(Nil:List[Int],0)(_ + _) === 0)
     }
   }
 
@@ -129,6 +138,10 @@ class ListTest extends WordSpec with MustMatchers {
 
     "produce Nil when used to initialize another list" in {
       assert(List.init(Cons(1,Nil)) === Nil)
+    }
+
+    "Sum to the single value present in an Int list" in {
+      assert(List.foldLeft(Cons(3,Nil),0)(_+_) === 3)
     }
   }
 }

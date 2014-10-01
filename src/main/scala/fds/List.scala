@@ -87,4 +87,11 @@ object List {
     foldRight(l,0)((_,acc)=> acc + 1)
   }
 
+  def foldLeft[A,B](as: List[A], z: B)(f: (B, A) => B): B = {
+    as match {
+      case Nil => z
+      case Cons(h,t) => foldLeft(t, f(z,h))(f)
+    }
+  }
+
 }
