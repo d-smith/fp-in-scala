@@ -83,6 +83,15 @@ class ListTest extends WordSpec with MustMatchers {
     }
   }
 
+  "multiple lists" must {
+    "be concatenated in order when not empty" in {
+      val l1:List[Int] = Cons(2,Cons(1,Nil))
+      val l2:List[Int] = Cons(4,Cons(3,Nil))
+      val listOfLists:List[List[Int]] = Cons(l2, Cons(l1, Nil))
+      assert(List.concat(listOfLists) === List.append(l2,l1))
+    }
+  }
+
   "An empty list" must {
     "produce Nil as the tail" in {
       assert(List.tail(Nil) === Nil)
