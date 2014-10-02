@@ -74,6 +74,13 @@ class ListTest extends WordSpec with MustMatchers {
       val l:List[Double] = Cons(3.0,Cons(2.0,Cons(1.0,Nil)))
       assert(List.product(l) === 6.0)
     }
+
+    "be appended to another list" in {
+      val l1:List[Int] = Cons(2,Cons(1,Nil))
+      val l2:List[Int] = Cons(4,Cons(3,Nil))
+
+      assert(List.append(l2,l1) === Cons(4,Cons(3, Cons(2, Cons(1,Nil)))))
+    }
   }
 
   "An empty list" must {
