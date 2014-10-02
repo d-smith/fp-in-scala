@@ -55,12 +55,7 @@ object List {
     reverse(initBackwards)
   }
 
-  def foldRight[A,B](as: List[A],z:B)(f:(A,B)=>B) : B = {
-    as match {
-      case Nil => z
-      case Cons(x, xs) => f(x,foldRight(xs,z)(f))
-    }
-  }
+  def foldRight[A,B](as: List[A],z:B)(f:(A,B)=>B) : B = foldLeft(reverse(as),z)((b,a)=>f(a,b))
 
   @tailrec
   def foldLeft[A,B](as: List[A], z: B)(f: (B, A) => B): B = {
@@ -75,15 +70,8 @@ object List {
   def sum(l: List[Int]) : Int = foldLeft(l,0)(_+_)
   def product(l:List[Double]) = foldLeft(l,1.0)(_*_)
 
-  def reverse[A](l:List[A]) : List[A] = {
-    foldLeft(l, List[A]())((acc,h) => Cons(h, acc))
-  }
+  def reverse[A](l:List[A]) : List[A] = foldLeft(l, List[A]())((acc,h) => Cons(h, acc))
 
-  def append[A](a1: List[A], a2: List[A]): List[A] = {
-    a1 match {
-      case Nil => a2
-      case Cons(h,t) => Cons(h, append(t, a2))
-    }
-  }
+  def append[A](a1: List[A], a2: List[A]): List[A] = foldRight(a1,a2)(Cons(_,_))
 
 }
