@@ -92,6 +92,18 @@ class ListTest extends WordSpec with MustMatchers {
     }
   }
 
+  "A list of integers" must {
+    "have each cell incremented by one via map" in {
+      val l:List[Int] = Cons(-1,Cons(-2, Cons(-3,Nil)))
+      assert(List.map(l)(_+1) === Cons(0,Cons(-1,Cons(-2,Nil))))
+    }
+
+    "have odds filtered" in {
+      val l:List[Int] = Cons(5,Cons(4,Cons(3, Cons(2, Cons(1,Nil)))))
+      assert(List.filter(l)(_%2 != 0) === Cons(5,Cons(3,Cons(1,Nil))))
+    }
+  }
+
   "An empty list" must {
     "produce Nil as the tail" in {
       assert(List.tail(Nil) === Nil)
