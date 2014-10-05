@@ -94,4 +94,12 @@ object List {
     flatMap(l)(a => if(f(a)) List(a) else Nil)
   }
 
+  def addPairs(a: List[Int], b: List[Int]) : List[Int] = {
+    (a,b) match {
+      case (_,Nil) => Nil
+      case (Nil,_) => Nil
+      case (Cons(ah, at), Cons(bh,bt)) => Cons(ah + bh, addPairs(at, bt))
+    }
+  }
+
 }

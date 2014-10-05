@@ -75,34 +75,7 @@ class ListTest extends WordSpec with MustMatchers {
       assert(List.product(l) === 6.0)
     }
 
-    "be appended to another list" in {
-      val l1:List[Int] = Cons(2,Cons(1,Nil))
-      val l2:List[Int] = Cons(4,Cons(3,Nil))
 
-      assert(List.append(l2,l1) === Cons(4,Cons(3, Cons(2, Cons(1,Nil)))))
-    }
-  }
-
-  "multiple lists" must {
-    "be concatenated in order when not empty" in {
-      val l1:List[Int] = Cons(2,Cons(1,Nil))
-      val l2:List[Int] = Cons(4,Cons(3,Nil))
-      val listOfLists:List[List[Int]] = Cons(l2, Cons(l1, Nil))
-      assert(List.concat(listOfLists) === List.append(l2,l1))
-    }
-  }
-
-  "A list of integers" must {
-    "have each cell incremented by one via map" in {
-      val l:List[Int] = Cons(-1,Cons(-2, Cons(-3,Nil)))
-      assert(List.map(l)(_+1) === Cons(0,Cons(-1,Cons(-2,Nil))))
-    }
-
-    "have odds filtered" in {
-      val l:List[Int] = Cons(5,Cons(4,Cons(3, Cons(2, Cons(1,Nil)))))
-      assert(List.filter(l)(_%2 != 0) === Cons(5,Cons(3,Cons(1,Nil))))
-      assert(List.flatmapFilter(l)(_%2 !=0) === Cons(5,Cons(3,Cons(1,Nil))))
-    }
 
     "be flatMappable" in {
       def county(n: Int) : List[Int] = {
@@ -121,6 +94,46 @@ class ListTest extends WordSpec with MustMatchers {
       assert(flat === Cons(3,Cons(3, Cons(3, Cons(2, Cons(2, Cons(1,Nil)))))))
 
     }
+  }
+
+  "multiple lists" must {
+    "be concatenated in order when not empty" in {
+      val l1:List[Int] = Cons(2,Cons(1,Nil))
+      val l2:List[Int] = Cons(4,Cons(3,Nil))
+      val listOfLists:List[List[Int]] = Cons(l2, Cons(l1, Nil))
+      assert(List.concat(listOfLists) === List.append(l2,l1))
+    }
+
+    "be appended to each other" in {
+      val l1:List[Int] = Cons(2,Cons(1,Nil))
+      val l2:List[Int] = Cons(4,Cons(3,Nil))
+
+      assert(List.append(l2,l1) === Cons(4,Cons(3, Cons(2, Cons(1,Nil)))))
+    }
+
+    "be added pairwise" in {
+      val l1:List[Int] = Cons(2,Cons(1,Nil))
+      val l2:List[Int] = Cons(4,Cons(3,Nil))
+
+      assert(List.addPairs(l1,l2) === Cons(6, Cons(4,Nil)))
+    }
+  }
+
+  "A list of integers" must {
+    "have each cell incremented by one via map" in {
+      val l:List[Int] = Cons(-1,Cons(-2, Cons(-3,Nil)))
+      assert(List.map(l)(_+1) === Cons(0,Cons(-1,Cons(-2,Nil))))
+    }
+
+    "have odds filtered" in {
+      val l:List[Int] = Cons(5,Cons(4,Cons(3, Cons(2, Cons(1,Nil)))))
+      assert(List.filter(l)(_%2 != 0) === Cons(5,Cons(3,Cons(1,Nil))))
+      assert(List.flatmapFilter(l)(_%2 !=0) === Cons(5,Cons(3,Cons(1,Nil))))
+    }
+
+
+
+
   }
 
   "An empty list" must {
