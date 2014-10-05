@@ -102,6 +102,24 @@ class ListTest extends WordSpec with MustMatchers {
       val l:List[Int] = Cons(5,Cons(4,Cons(3, Cons(2, Cons(1,Nil)))))
       assert(List.filter(l)(_%2 != 0) === Cons(5,Cons(3,Cons(1,Nil))))
     }
+
+    "be flatMappable" in {
+      def county(n: Int) : List[Int] = {
+        def go(l:List[Int], v: Int, n:Int) : List[Int] = {
+          n match {
+            case 0 => l
+            case _ => go(Cons(v,l), v, n - 1)
+          }
+        }
+        go(Nil, n, n)
+      }
+
+
+      val l:List[Int] = Cons(3,Cons(2,Cons(1,Nil)))
+      val flat = List.flatMap(l)(county)
+      assert(flat === Cons(3,Cons(3, Cons(3, Cons(2, Cons(2, Cons(1,Nil)))))))
+
+    }
   }
 
   "An empty list" must {
