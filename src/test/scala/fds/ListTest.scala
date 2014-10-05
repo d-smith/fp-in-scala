@@ -101,6 +101,7 @@ class ListTest extends WordSpec with MustMatchers {
     "have odds filtered" in {
       val l:List[Int] = Cons(5,Cons(4,Cons(3, Cons(2, Cons(1,Nil)))))
       assert(List.filter(l)(_%2 != 0) === Cons(5,Cons(3,Cons(1,Nil))))
+      assert(List.flatmapFilter(l)(_%2 !=0) === Cons(5,Cons(3,Cons(1,Nil))))
     }
 
     "be flatMappable" in {
