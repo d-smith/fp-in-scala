@@ -102,4 +102,12 @@ object List {
     }
   }
 
+  def zipWith[A,B](a: List[A], b:List[A])(f: (A,A) => B) : List[B] = {
+    (a,b) match {
+      case (_,Nil) => Nil
+      case (Nil,_) => Nil
+      case(Cons(ah,at), Cons(bh, bt)) => Cons(f(ah,bh), zipWith(at,bt)(f))
+    }
+  }
+
 }

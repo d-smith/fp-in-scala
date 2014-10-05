@@ -117,6 +117,13 @@ class ListTest extends WordSpec with MustMatchers {
 
       assert(List.addPairs(l1,l2) === Cons(6, Cons(4,Nil)))
     }
+
+    "be multiplied pairwise" in {
+      val l1:List[Int] = Cons(10, Cons(2,Cons(1,Nil)))
+      val l2:List[Int] = Cons(-10,Cons(4,Cons(3,Nil)))
+
+      assert(List.zipWith(l1,l2)(_*_) === Cons(-100,Cons(8,Cons(3,Nil))))
+    }
   }
 
   "A list of integers" must {
