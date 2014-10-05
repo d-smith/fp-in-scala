@@ -83,7 +83,8 @@ object List {
   }
 
   def flatMap[A,B](l:List[A])(f: A => List[B]):List[B] = {
-    concat(map(l)(f))
+    //concat(map(l)(f))
+    foldRight(l, Nil:List[B])((a,b)=>append(f(a),b))
   }
 
   def filter[A](l:List[A])(f:A => Boolean) =
