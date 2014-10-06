@@ -97,18 +97,16 @@ object List {
 
   def zipWith[A,B](a: List[A], b:List[A])(f: (A,A) => B) : List[B] = {
     (a,b) match {
-      case (_,Nil) => Nil
-      case (Nil,_) => Nil
       case(Cons(ah,at), Cons(bh, bt)) => Cons(f(ah,bh), zipWith(at,bt)(f))
+      case _ => Nil
     }
   }
 
   def startsWith[A](l: List[A], as: List[A]) : Boolean = {
     (l,as) match {
-      case (Nil, Nil) => true
-      case (Nil, Cons(_,_)) => false
-      case (Cons(_,_), Nil) => true
+      case (_, Nil) => true
       case (Cons(lh, lt), Cons(ash, ast)) => if(lh != ash) false else startsWith(lt, ast)
+      case _ => false
     }
   }
 
