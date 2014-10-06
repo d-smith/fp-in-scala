@@ -90,17 +90,10 @@ object List {
   def filter[A](l:List[A])(f:A => Boolean) =
     foldRight(l, Nil:List[A])((a,b)=> if(f(a)) Cons(a,b) else b)
 
-  def flatmapFilter[A](l:List[A])(f:A => Boolean): List[A] = {
-    flatMap(l)(a => if(f(a)) List(a) else Nil)
-  }
+  def flatmapFilter[A](l:List[A])(f:A => Boolean): List[A] = flatMap(l)(a => if(f(a)) List(a) else Nil)
 
-  def addPairs(a: List[Int], b: List[Int]) : List[Int] = {
-    (a,b) match {
-      case (_,Nil) => Nil
-      case (Nil,_) => Nil
-      case (Cons(ah, at), Cons(bh,bt)) => Cons(ah + bh, addPairs(at, bt))
-    }
-  }
+  def addPairs(a: List[Int], b: List[Int]) : List[Int] =  zipWith(a,b)(_+_)
+
 
   def zipWith[A,B](a: List[A], b:List[A])(f: (A,A) => B) : List[B] = {
     (a,b) match {
