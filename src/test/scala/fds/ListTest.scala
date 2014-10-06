@@ -124,6 +124,31 @@ class ListTest extends WordSpec with MustMatchers {
 
       assert(List.zipWith(l1,l2)(_*_) === Cons(-100,Cons(8,Cons(3,Nil))))
     }
+
+    "assess equality of starting subsequence" in {
+      val l1 = Cons(1,Cons(2,Cons(3,Nil)))
+      val l2 = Cons(1,Cons(2, Nil))
+      val l3 = Cons(0,Cons(1, Cons(2, Cons(3,Nil))))
+
+      assert(List.startsWith(l1, l2) === true)
+      assert(List.startsWith(l2, l1) === false)
+      assert(List.startsWith(l3,l2) === false)
+      assert(List.startsWith(List.tail(l3), l2) === true)
+    }
+
+    "access if one list contains another as a subsequence" in {
+      val l1 = Cons(1,Cons(2,Cons(3,Nil)))
+      val l2 = Cons(1,Cons(2, Nil))
+      val l3 = Cons(0,Cons(1, Cons(2, Cons(3,Nil))))
+
+      assert(List.hasSubsequence(l1,l2) === true)
+      assert(List.hasSubsequence(l2,l1) === false)
+      assert(List.hasSubsequence(l3,l2) === true)
+      assert(List.hasSubsequence(l2,l3) === false)
+      assert(List.hasSubsequence(l3,l3) === true)
+      assert(List.hasSubsequence(Nil, Nil) === false)
+      assert(List.hasSubsequence(l1,Nil) === true)
+    }
   }
 
   "A list of integers" must {
