@@ -21,4 +21,10 @@ class TreeTest extends WordSpec with MustMatchers {
     val t:Tree[Int] = Branch(Branch(Leaf(1), Leaf(2)), Branch(Leaf(1), Branch(Leaf(1), Leaf(1))))
     assert(Tree.depth(t) === 3)
   }
+
+  "map leaf values via a function" in {
+    val t:Tree[Int] = Branch(Branch(Leaf(1), Leaf(2)), Branch(Leaf(3), Branch(Leaf(4), Leaf(5))))
+    val f = (a:Int) => "x" + a
+    assert(Tree.map(t)(f) === Branch(Branch(Leaf("x1"), Leaf("x2")), Branch(Leaf("x3"), Branch(Leaf("x4"), Leaf("x5")))))
+  }
 }
