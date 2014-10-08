@@ -16,4 +16,9 @@ class TreeTest extends WordSpec with MustMatchers {
       assert(Tree.maximum(t) === 3)
     }
   }
+
+  "return its max node depth" in {
+    val t:Tree[Int] = Branch(Branch(Leaf(1), Leaf(2)), Branch(Leaf(1), Branch(Leaf(1), Leaf(1))))
+    assert(Tree.depth(t) === 3)
+  }
 }
