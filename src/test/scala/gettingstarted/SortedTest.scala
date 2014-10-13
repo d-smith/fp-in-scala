@@ -14,7 +14,7 @@ class SortedTest extends FlatSpec with GeneratorDrivenPropertyChecks {
   "Generated arrays" should "be flagged as sorted when ordered" in {
     forAll { (a: Int, b: Int, c: Int, d: Int) =>
       val arrayToTest = Array(a,b,c,d)
-      println(arrayToTest.mkString(","))
+      //println(arrayToTest.mkString(","))
       if(a <= b && b <= c && c <= d) {
         assert(testOrderingOf(arrayToTest) == true)
       } else {

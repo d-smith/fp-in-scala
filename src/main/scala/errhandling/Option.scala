@@ -25,6 +25,11 @@ sealed trait Option[+A] {
     case None => ob
     case _ => this
   }
+
+  def filter(f: A => Boolean) : Option[A] = this match {
+    case Some(x) if(f(x)) => this
+    case _ => None
+  }
 }
 
 

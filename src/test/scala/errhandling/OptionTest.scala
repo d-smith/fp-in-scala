@@ -53,4 +53,16 @@ class OptionTest extends WordSpec with MustMatchers {
     assert(None.orElse(Some(42)) === Some(42))
   }
 
+  "Filter returns some when the filter predicate returns true" in {
+    assert(Some(42).filter(_ == 42) === Some(42))
+  }
+
+  "Filter returns None when the filter predicate returns false" in {
+    assert(Some(242).filter(_ == 42) === None)
+  }
+
+  "Filter returns None when called on None" in {
+    assert(None.filter(_ => true) === None)
+  }
+
 }
