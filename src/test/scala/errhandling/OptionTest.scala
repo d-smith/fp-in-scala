@@ -35,4 +35,13 @@ class OptionTest extends WordSpec with MustMatchers {
     assert(None.flatMap(f) === None)
   }
 
+  "getOrElse returns option value when it isn't none" in {
+    val o:Option[Int] = Some(2)
+    assert(o.getOrElse(3) === 2)
+  }
+
+  "getOrElse returns argument when option is none" in {
+    assert(None.getOrElse(3) === 3)
+  }
+
 }
