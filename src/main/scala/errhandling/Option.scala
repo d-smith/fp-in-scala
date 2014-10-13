@@ -20,6 +20,11 @@ sealed trait Option[+A] {
       case Some(x) => x
     }
   }
+
+  def orElse[B >: A](ob: => Option[B]) : Option[B] = this match {
+    case None => ob
+    case _ => this
+  }
 }
 
 

@@ -44,4 +44,13 @@ class OptionTest extends WordSpec with MustMatchers {
     assert(None.getOrElse(3) === 3)
   }
 
+  "orElse returns the option when it is some" in {
+    val a: Option[Int] = Some(42)
+    assert(a.orElse(Some(2)) === Some(42))
+  }
+
+  "orElse returns its argument when invoked on None" in {
+    assert(None.orElse(Some(42)) === Some(42))
+  }
+
 }
