@@ -1,7 +1,7 @@
 package errhandling
 
 
-object Variance {
+object Misc {
 
   def mean(xs: Seq[Double]) : Option[Double] = {
     if(xs.isEmpty) None
