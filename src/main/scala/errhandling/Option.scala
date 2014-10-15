@@ -22,6 +22,10 @@ sealed trait Option[+A] {
 
   def filter(f: A => Boolean) : Option[A] = flatMap(a => if(f(a))Some(a) else None)
 
+
+}
+
+object Option {
   def map2[A,B,C](a: Option[A], b: Option[B])(f:(A,B) => C) : Option[C] = {
     a.flatMap(aa => b.map(bb => f(aa,bb)))
   }
