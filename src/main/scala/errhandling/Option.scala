@@ -35,9 +35,17 @@ object Option {
     case h :: t => h.flatMap(head => sequence(t).map(head :: _))
   }
 
+  def sequenceViaFold[A](a:List[Option[A]]) : Option[List[A]] = {
+    a.foldRight[Option[List[A]]](Some(Nil))((x,y)=> map2(x,y)(_ :: _))
+  }
+
   def traverse[A,B](a:List[A])(f: A => Option[B]): Option[List[B]] = a match {
     case Nil => Some(Nil)
     case h :: t => map2(f(h),traverse(t)(f))(_ :: _)
+  }
+
+  def traverseViaFold[A,B](a:List[A])(f: A => Option[B]): Option[List[B]] = {
+    a.foldRight[Option[List[B]]](Some(Nil))((x,y) => map2(f(x),y)(_ :: _))
   }
 }
 

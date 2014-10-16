@@ -77,21 +77,25 @@ class OptionTest extends WordSpec with MustMatchers {
   "Sequence returns a list of A given a list of Option[A]" in {
     val a = List(Some(1), Some(2), Some(3))
     assert(Option.sequence(a) === Some(List(1,2,3)))
+    assert(Option.sequenceViaFold(a) === Some(List(1,2,3)))
   }
 
   "Sequence returns none if any list of Option[A] elements are None" in {
     val a = List(Some(1), Some(2), None)
     assert(Option.sequence(a) === None)
+    assert(Option.sequenceViaFold(a) === None)
   }
 
   "Traverse returns mapped list from list of options if all ops work and there are no none elements" in {
     val a = List("1","2","3")
     assert(Option.traverse(a)(convertStringToInt) === Some(List(1,2,3)))
+    assert(Option.traverseViaFold(a)(convertStringToInt) === Some(List(1,2,3)))
   }
 
   "Traverse returns None if a conversion fails on a list element" in {
     val a = List("1", "2", "three!")
     assert(Option.traverse(a)(convertStringToInt) === None)
+    assert(Option.traverseViaFold(a)(convertStringToInt) === None)
   }
-  
+
 }
