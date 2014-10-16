@@ -65,4 +65,14 @@ class OptionTest extends WordSpec with MustMatchers {
     assert(None.filter(_ => true) === None)
   }
 
+  "Sequence returns a list of A given a list of Option[A]" in {
+    val a = List(Some(1), Some(2), Some(3))
+    assert(Option.sequence(a) === Some(List(1,2,3)))
+  }
+
+  "Sequence returns none if any list of Option[A] elements are None" in {
+    val a = List(Some(1), Some(2), None)
+    assert(Option.sequence(a) === None)
+  }
+
 }
