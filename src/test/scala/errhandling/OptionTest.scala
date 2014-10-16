@@ -2,11 +2,20 @@ package errhandling
 
 import org.scalatest.WordSpec
 import org.scalatest.matchers.MustMatchers
+import scala.util.Try
 
 
 class OptionTest extends WordSpec with MustMatchers {
   //Hide standard Option class for testing our version
   import scala.{Option => _}
+
+  def convertStringToInt(s: String) : Option[Int] = {
+    try {
+      Some(s.toInt)
+    }  catch {
+      case _:NumberFormatException => None
+    }
+  }
 
   "An option with some value must apply a mapping function" in {
     val s:Option[Int] = Some(1)
@@ -75,4 +84,14 @@ class OptionTest extends WordSpec with MustMatchers {
     assert(Option.sequence(a) === None)
   }
 
+  "Traverse returns mapped list from list of options if all ops work and there are no none elements" in {
+    val a = List("1","2","3")
+    assert(Option.traverse(a)(convertStringToInt) === Some(List(1,2,3)))
+  }
+
+  "Traverse returns None if a conversion fails on a list element" in {
+    val a = List("1", "2", "three!")
+    assert(Option.traverse(a)(convertStringToInt) === None)
+  }
+  
 }
