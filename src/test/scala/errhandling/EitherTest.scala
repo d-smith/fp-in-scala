@@ -29,4 +29,14 @@ class EitherTest extends WordSpec with MustMatchers {
     val a = Left(1)
     assert(a.flatMap(testFn) === Left(1))
   }
+
+  "orElse returns the else on a left" in {
+    val e = Left(1)
+    assert(e.orElse(Right(1)) === Right(1))
+  }
+
+  "orElse returns the right value when either is a right" in {
+    val a = Right(1)
+    assert(a.orElse(Right(2)) === Right(1))
+  }
 }
