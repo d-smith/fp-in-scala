@@ -39,4 +39,16 @@ class EitherTest extends WordSpec with MustMatchers {
     val a = Right(1)
     assert(a.orElse(Right(2)) === Right(1))
   }
+
+  "map 2 combines right values" in {
+    val a = Right(1)
+    val b = Right(1)
+    assert(a.map2(b)(_+_) === Right(2))
+  }
+
+  "map2 returns a Left if either value to be combined is a left" in {
+    assert(Right(1).map2(Left(-1))(_+_) === Left(-1))
+    val left: Either[Int,Int] = Left(-1)
+    assert(left.map2(Right(1))(_+_) === Left(-1))
+  }
 }
