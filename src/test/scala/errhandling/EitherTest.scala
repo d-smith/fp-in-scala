@@ -51,4 +51,26 @@ class EitherTest extends WordSpec with MustMatchers {
     val left: Either[Int,Int] = Left(-1)
     assert(left.map2(Right(1))(_+_) === Left(-1))
   }
+
+  "sequence returns list of right vals when no left is in list" in {
+    val es = List(Right(1), Right(2), Right(3))
+    assert(Either.sequence(es) === Right(List(1,2,3)))
+  }
+
+  "sequence returns 1st left val in list" in {
+    val es = List(Right(1), Right(2), Left(3), Right(4), Left(5), Right(6))
+    assert(Either.sequence(es) === Left(3))
+  }
+
+  "traverse returns mapped list when no lefts are present" in {
+    val es = List(1,2,3)
+    assert(Either.traverse(es)(a => Right(a + 1)) === Right(List(2,3,4)))
+  }
+
+  "traverse returns 1st left val in list" in {
+    def addOneMostly(a: Int) : Either[Int,Int] = if(a == 2) Left(2) else Right(a)
+
+    val es = List(1,2,3)
+    assert(Either.traverse(es)(addOneMostly) === Left(2))
+  }
 }

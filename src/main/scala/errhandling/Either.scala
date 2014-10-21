@@ -23,6 +23,19 @@ sealed trait Either[+E,+A] {
       aa <- this
       bb <- b
     } yield f(aa,bb)
+
+
+}
+
+object Either {
+ def traverse[E,A,B](es: List[A])(f:A => Either[E,B]) : Either[E,List[B]] =
+  es match {
+    case Nil => Right(Nil)
+    case h :: t => (f(h) map2 traverse(t)(f))(_ :: _)
+  }
+
+  def sequence[E,A](es: List[Either[E,A]]) : Either[E, List[A]] =
+    traverse(es)(a => a)
 }
 
 case class Left[+E](value: E) extends Either[E,Nothing]
