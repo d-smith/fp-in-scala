@@ -10,4 +10,9 @@ class StreamTest extends WordSpec with MustMatchers {
     val a = Stream(1,2,3)
     assert(a.headOption === Some(1))
   }
+
+  "I can convert a stream to a list" in {
+    val a = Stream(1,2,3,4)
+    assert(a.toList === List(1,2,3,4))
+  }
 }

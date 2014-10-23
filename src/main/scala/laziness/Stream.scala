@@ -7,6 +7,14 @@ trait Stream[+A] {
     case Empty => None
     case Cons(h,t) => Some(h())
   }
+
+  def toList : List[A] = {
+    def toListR(acc: List[A], s: Stream[A]) : List[A] = s match {
+      case Cons(h,t) => toListR(h() :: acc, t())
+      case _ => acc
+    }
+    toListR(List(), this).reverse
+  }
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
