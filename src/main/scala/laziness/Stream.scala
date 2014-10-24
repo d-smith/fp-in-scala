@@ -15,6 +15,18 @@ trait Stream[+A] {
     }
     toListR(List(), this).reverse
   }
+
+  def take(n:Int) : Stream[A] = {
+    if(n > 0) {
+      this match {
+        case Cons(h,t) if n == 1 => cons(h(), Stream.empty)
+        case Cons(h,t) => cons(h(), t().take(n-1))
+        case _ => Stream.empty
+      }
+    }
+    else Stream()
+  }
+
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
