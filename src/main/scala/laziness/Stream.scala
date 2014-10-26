@@ -27,6 +27,14 @@ trait Stream[+A] {
     else Stream()
   }
 
+  def drop(n:Int) : Stream[A] = {
+   if(n <= 0) this
+    else this match {
+     case Cons(h,t) => t().drop(n - 1)
+     case _ => Stream()
+   }
+  }
+
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]

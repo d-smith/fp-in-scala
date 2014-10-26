@@ -35,4 +35,14 @@ class StreamTest extends WordSpec with MustMatchers {
     val s = Stream(1,2,3,4,5)
     assert(s.take(-1) === Stream())
   }
+
+  "The first 3 elements are dropped" in {
+    val s = Stream(1,2,3,4,5)
+    assert(s.drop(3).toList === Stream(4,5).toList)
+  }
+
+  "A stream with no elements is returned when no more items remain to be dropped" in {
+    val s = Stream(1)
+    assert(s.drop(100) === Stream())
+  }
 }
