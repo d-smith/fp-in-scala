@@ -45,4 +45,14 @@ class StreamTest extends WordSpec with MustMatchers {
     val s = Stream(1)
     assert(s.drop(100) === Stream())
   }
+
+  "Elements can be taken from a string while they satisfy a predicate" in {
+    val s = Stream(1,2,3,4,5)
+    assert(s.takeWhile(_<=2).toList === Stream(1,2).toList)
+  }
+
+  "An empty stream is return by takeWhile if the first element doesn't satisfy the predicate" in {
+    val s = Stream(1,2,3,4,5)
+    assert(s.takeWhile(_ > 2) === Stream())
+  }
 }
