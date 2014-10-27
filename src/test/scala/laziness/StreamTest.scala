@@ -55,4 +55,15 @@ class StreamTest extends WordSpec with MustMatchers {
     val s = Stream(1,2,3,4,5)
     assert(s.takeWhile(_ > 2) === Stream())
   }
+
+  "forAll returns true when all elements satisfy the predicate" in {
+    val s = Stream(1,2,3,4)
+    assert(s.forAll(_ > 0) === true)
+  }
+
+  "forAll returns false when any element in the stream does not satisfy the predicate" in {
+    val s = Stream(1,3,2,4,5)
+    assert(s.forAll(_<=3) === false)
+  }
+
 }
