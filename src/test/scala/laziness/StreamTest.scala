@@ -66,4 +66,9 @@ class StreamTest extends WordSpec with MustMatchers {
     assert(s.forAll(_<=3) === false)
   }
 
+  "map a stream of ints to a stream of strings" in {
+    val s = Stream(1,2,3)
+    assert(s.map("" + _).toList === Stream("1","2","3").toList)
+  }
+
 }

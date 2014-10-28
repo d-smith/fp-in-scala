@@ -47,6 +47,10 @@ trait Stream[+A] {
       case _ => z
     }
 
+  def map[B](f: A => B ) : Stream[B] = {
+    foldRight(Stream[B]())((h,t) => cons(f(h),t))
+  }
+
 
 }
 case object Empty extends Stream[Nothing]
