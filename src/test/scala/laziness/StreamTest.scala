@@ -71,4 +71,18 @@ class StreamTest extends WordSpec with MustMatchers {
     assert(s.map("" + _).toList === Stream("1","2","3").toList)
   }
 
+  "odds are filtered out of the stream" in {
+    val s = Stream(1,2,3,4,5)
+    assert(s.filter(_%2 == 0).toList === Stream(2,4).toList)
+  }
+
+  "two streams are appended" in {
+    assert(Stream(1,2,3).append(Stream(4,5,6)).toList === Stream(1,2,3,4,5,6).toList)
+  }
+
+  "A stream can be flat mapped" in {
+    val s = Stream(1,2,3)
+    assert(s.flatMap(Stream(_)).toList === Stream(1,2,3).toList)
+  }
+
 }
