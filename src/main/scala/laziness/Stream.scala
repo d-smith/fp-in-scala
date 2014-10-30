@@ -62,6 +62,7 @@ trait Stream[+A] {
     foldRight(Stream[B]())((h,t) => f(h).append(t))
 
 
+
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
@@ -77,4 +78,7 @@ object Stream {
 
   def apply[A](as: A*) : Stream[A] =
     if(as.isEmpty) empty else cons(as.head, apply(as.tail: _*))
+
+  def constant[A](a: A) : Stream[A] =
+    cons(a, constant(a))
 }

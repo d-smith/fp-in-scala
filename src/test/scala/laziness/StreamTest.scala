@@ -85,4 +85,9 @@ class StreamTest extends WordSpec with MustMatchers {
     assert(s.flatMap(Stream(_)).toList === Stream(1,2,3).toList)
   }
 
+  "A finite result can be obtained from an infinite stream" in {
+    val ones:Stream[Int] = Stream.constant(1)
+    assert(ones.take(3).toList === Stream(1,1,1).toList)
+  }
+
 }
