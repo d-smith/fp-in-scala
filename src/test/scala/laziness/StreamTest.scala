@@ -90,4 +90,9 @@ class StreamTest extends WordSpec with MustMatchers {
     assert(ones.take(3).toList === Stream(1,1,1).toList)
   }
 
+  "An infinite stream of integers can be generated" in {
+    val is = Stream.from(1)
+    assert(is.take(4).toList === Stream(1,2,3,4).toList)
+  }
+
 }
