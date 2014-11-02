@@ -95,4 +95,9 @@ class StreamTest extends WordSpec with MustMatchers {
     assert(is.take(4).toList === Stream(1,2,3,4).toList)
   }
 
+  "The fibonacci sequence can be generated" in {
+    val fs = Stream.fibs()
+    assert(fs.take(7).toList === Stream(0,1,1,2,3,5,8).toList)
+  }
+
 }

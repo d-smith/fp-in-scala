@@ -84,4 +84,11 @@ object Stream {
 
   def from(n: Int) : Stream[Int] =
     cons(n, from(n + 1))
+
+  def fibs() : Stream[Int] = {
+    def fibsR(n1: Int, n2: Int) : Stream[Int] = {
+      cons(n1, fibsR(n2, n1 + n2))
+    }
+    fibsR(0,1)
+  }
 }
