@@ -91,4 +91,18 @@ object Stream {
     }
     fibsR(0,1)
   }
+
+  def fibsUnfold() : Stream[Int] =
+    unfold((0,1)) { case(f0,f1) => Some((f0,(f1, f0 + f1))) }
+
+  def fromUnfold(n: Int) : Stream[Int] =
+    unfold(n) { case x => Some(x, x+1)}
+
+
+  def unfold[A,S](z: S)(f: S => Option[(A,S)]) : Stream[A] =
+    f(z) match {
+      case Some((a,s)) => cons(a, unfold(s)(f))
+      case None => Stream.empty
+    }
+
 }

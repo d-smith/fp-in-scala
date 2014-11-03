@@ -93,11 +93,15 @@ class StreamTest extends WordSpec with MustMatchers {
   "An infinite stream of integers can be generated" in {
     val is = Stream.from(1)
     assert(is.take(4).toList === Stream(1,2,3,4).toList)
+    val fu = Stream.fromUnfold(1)
+    assert(fu.take(4).toList === Stream(1,2,3,4).toList)
   }
 
   "The fibonacci sequence can be generated" in {
     val fs = Stream.fibs()
     assert(fs.take(7).toList === Stream(0,1,1,2,3,5,8).toList)
+    val unfoldFibs = Stream.fibsUnfold()
+    assert(unfoldFibs.take(7).toList === Stream(0,1,1,2,3,5,8).toList)
   }
 
 }
