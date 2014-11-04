@@ -51,6 +51,12 @@ trait Stream[+A] {
     foldRight(Stream[B]())((h,t) => cons(f(h),t))
   }
 
+  def mapUnfold[B](f: A => B) : Stream[B] =
+    unfold(this) {
+      case Cons(h,t) => Some(f(h()),t())
+      case _ => None
+    }
+
   def filter[B](f: A => Boolean): Stream[A] =
     foldRight(Stream[A]())((h,t) =>
       if(f(h)) cons(h,t) else t)

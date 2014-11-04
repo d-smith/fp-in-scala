@@ -69,6 +69,7 @@ class StreamTest extends WordSpec with MustMatchers {
   "map a stream of ints to a stream of strings" in {
     val s = Stream(1,2,3)
     assert(s.map("" + _).toList === Stream("1","2","3").toList)
+    assert(s.mapUnfold("" + _).toList === Stream("1","2","3").toList)
   }
 
   "odds are filtered out of the stream" in {
