@@ -98,6 +98,9 @@ object Stream {
   def fromUnfold(n: Int) : Stream[Int] =
     unfold(n) { case x => Some(x, x+1)}
 
+  def constantUnfold[A](a: A) : Stream[A] =
+    unfold(a) { case a => Some(a,a)}
+
 
   def unfold[A,S](z: S)(f: S => Option[(A,S)]) : Stream[A] =
     f(z) match {

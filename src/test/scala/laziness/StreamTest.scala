@@ -88,6 +88,8 @@ class StreamTest extends WordSpec with MustMatchers {
   "A finite result can be obtained from an infinite stream" in {
     val ones:Stream[Int] = Stream.constant(1)
     assert(ones.take(3).toList === Stream(1,1,1).toList)
+    val twos: Stream[String] = Stream.constantUnfold("2")
+    assert(twos.take(2).toList === List("2","2"))
   }
 
   "An infinite stream of integers can be generated" in {
