@@ -19,6 +19,7 @@ class StreamTest extends WordSpec with MustMatchers {
   "I can take the first n items from a Stream" in {
     val s = Stream(1,2,3,4)
     assert(s.take(2).toList === Stream(1,2).toList)
+    assert(s.takeUnfold(2).toList === Stream(1,2).toList)
   }
 
   "take takes what's available if n is greater than content of the stream" in {
@@ -49,6 +50,7 @@ class StreamTest extends WordSpec with MustMatchers {
   "Elements can be taken from a string while they satisfy a predicate" in {
     val s = Stream(1,2,3,4,5)
     assert(s.takeWhile(_<=2).toList === Stream(1,2).toList)
+    assert(s.takeWhileUnfold(_<=2).toList === Stream(1,2).toList)
   }
 
   "An empty stream is return by takeWhile if the first element doesn't satisfy the predicate" in {

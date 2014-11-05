@@ -27,6 +27,13 @@ trait Stream[+A] {
     else Stream()
   }
 
+  def takeUnfold(n:Int) : Stream[A] =
+    unfold((this,n)) {
+      case (Cons(h,t),n) if n == 1 => Some((h(), (Stream.empty, n - 1)))
+      case (Cons(h,t),n) if (n > 0) => Some((h(),(t(), n - 1)))
+      case _ => None
+    }
+
   def drop(n:Int) : Stream[A] = {
    if(n <= 0) this
     else this match {
@@ -37,6 +44,12 @@ trait Stream[+A] {
 
   def takeWhile(f: A => Boolean) : Stream[A] =
     foldRight(Stream[A]())((a,b)=> if (f(a)) cons(a,b) else Stream.empty)
+
+  def takeWhileUnfold(f: A => Boolean) : Stream[A] =
+    unfold(this) {
+      case Cons(h,t) if f(h()) => Some(h(),t())
+      case _ => None
+    }
 
   def forAll(p: A => Boolean) : Boolean =
     foldRight(true)((a,b)=> p(a) && b)
