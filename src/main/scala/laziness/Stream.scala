@@ -127,4 +127,12 @@ object Stream {
       case None => Stream.empty
     }
 
+  def zipWith[A,B](as: Stream[A], bs: Stream[A])(f: (A,A)=> B) : Stream[B] =
+    (as,bs) match {
+      case (Cons(ah, at), Cons(bh,bt)) => cons(f(ah(), bh()), zipWith(at(), bt())(f))
+      case (_, empty: Stream[A]) => Stream[B]()
+      case (empty, _) => Stream[B]()
+
+    }
+
 }

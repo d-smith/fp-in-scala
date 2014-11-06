@@ -109,4 +109,10 @@ class StreamTest extends WordSpec with MustMatchers {
     assert(unfoldFibs.take(7).toList === Stream(0,1,1,2,3,5,8).toList)
   }
 
+  "two streams can be zipped together" in {
+    val s1 = Stream(1,2,3)
+    val s2 = Stream(-1, -2, -3)
+    assert(Stream.zipWith(s1,s2)(_+_).toList === List(0,0,0))
+  }
+
 }
