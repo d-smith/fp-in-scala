@@ -80,7 +80,11 @@ trait Stream[+A] {
   def flatMap[B](f: A => Stream[B]): Stream[B] =
     foldRight(Stream[B]())((h,t) => f(h).append(t))
 
-
+  def zipWith[B,C](s2: Stream[B])(f: (A,B) => C): Stream[C] =
+    unfold((this, s2)) {
+      case (Cons(ah, at), Cons(bh,bt)) => Some((f(ah(),bh()),(at(),bt())))
+      case _ => None
+    }
 
 }
 case object Empty extends Stream[Nothing]
@@ -127,18 +131,6 @@ object Stream {
       case None => Stream.empty
     }
 
-  def zipWith[A,B](as: Stream[A], bs: Stream[A])(f: (A,A)=> B) : Stream[B] =
-    (as,bs) match {
-      case (Cons(ah, at), Cons(bh,bt)) => cons(f(ah(), bh()), zipWith(at(), bt())(f))
-      case (_, empty: Stream[A]) => Stream[B]()
-      case (empty, _) => Stream[B]()
 
-    }
-
-  def zipWithUnfold[A,B](as: Stream[A], bs: Stream[A])(f: (A,A)=> B) : Stream[B] =
-    unfold((Stream[B](), as, bs)) {
-      case (s, Cons(a, at), Cons(b,bt)) => Some((f(a(),b()),(s, at(), bt())))
-      case _ => None
-     }
 
 }
