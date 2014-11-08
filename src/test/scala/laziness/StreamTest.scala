@@ -115,4 +115,13 @@ class StreamTest extends WordSpec with MustMatchers {
     assert(s1.zipWith(s2)(_+_).toList === List(0,0,0))
   }
 
+  "the tails of a stream can be produced" in {
+    val s = Stream(1,2,3)
+    val t = s.tails.toList
+    assert(t(0).toList === List(1,2,3))
+    assert(t(1).toList === List(2,3))
+    assert(t(2).toList === List(3))
+    assert(t(3) === Empty)
+  }
+
 }

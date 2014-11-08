@@ -86,6 +86,11 @@ trait Stream[+A] {
       case _ => None
     }
 
+  def tails: Stream[Stream[A]] =
+    unfold(this) {
+      case Empty => None
+      case s => Some((s, s.drop(1)))
+    } append(Stream(empty))
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
