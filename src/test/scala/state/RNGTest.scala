@@ -21,4 +21,13 @@ class RNGTest extends WordSpec with MustMatchers {
     }
 
   }
+
+  "nonNegativeInt always produces non negative ints" in {
+    var generator: RNG = SimpleRNG(42)
+    for(i <- 1 to 10000) {
+      val (generated, nextGen) = RNG.nonNegativeInt(generator)
+      assert(generated >= 0)
+      generator = nextGen
+    }
+  }
 }

@@ -16,4 +16,11 @@ object RNG {
       (n, nextRNG)
     }
   }
+
+  def nonNegativeInt(rng: RNG) : (Int, RNG) = {
+    val (generated, generator) = rng.nextInt
+    (if(generated < 0) -(1 + generated) else generated, generator)
+  }
+
+
 }
