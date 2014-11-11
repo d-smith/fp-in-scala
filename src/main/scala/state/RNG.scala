@@ -22,5 +22,10 @@ object RNG {
     (if(generated < 0) -(1 + generated) else generated, generator)
   }
 
+  def double(rng: RNG) : (Double, RNG) = {
+    val (i,r) = nonNegativeInt(rng)
+    (i / (Int.MaxValue.toDouble + 1), r)
+  }
+
 
 }
