@@ -48,4 +48,13 @@ class RNGTest extends WordSpec with MustMatchers {
     assert(i1 === i2)
     assert(d1 === d2)
   }
+
+  "double int produces int double tuples" in {
+    var gen1: RNG = SimpleRNG(1)
+    var gen2: RNG = SimpleRNG(1)
+    val((d1,i1), _) = RNG.intDouble(gen1)
+    val((d2,i2), _) = RNG.intDouble(gen2)
+    assert(i1 === i2)
+    assert(d1 === d2)
+  }
 }
