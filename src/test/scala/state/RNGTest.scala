@@ -57,4 +57,21 @@ class RNGTest extends WordSpec with MustMatchers {
     assert(i1 === i2)
     assert(d1 === d2)
   }
+
+  "int produces a list of random integers" in {
+    var rng1: RNG = SimpleRNG(42)
+    val rng2: RNG = SimpleRNG(42)
+
+    var l = List[Int]()
+    for(i <- 1 to 3) {
+      val (i, r) = rng1.nextInt
+      l = i :: l
+      rng1 = r
+    }
+
+    val l2 = RNG.ints(3)(rng2)
+
+    assert(l2._1 === l)
+
+  }
 }

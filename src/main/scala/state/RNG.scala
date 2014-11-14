@@ -45,4 +45,18 @@ object RNG {
     ((d1, d2, d3), r3)
   }
 
+  def ints(count: Int)(rng: RNG) : (List[Int], RNG) = {
+    def go(n: Int, rng: RNG, l: List[Int]) : (List[Int], RNG) = {
+      n match {
+        case n if n > 0 =>
+          val (i, r) = rng.nextInt
+          go(n - 1, r, i :: l)
+        case _ => (l,rng)
+      }
+    }
+
+    go(count, rng, List[Int]())
+  }
+
+
 }
