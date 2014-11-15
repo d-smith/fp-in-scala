@@ -2,7 +2,7 @@ package state
 
 import org.scalatest.WordSpec
 import org.scalatest.matchers.MustMatchers
-import state.RNG.SimpleRNG
+import state.RNG.{Rand, SimpleRNG}
 
 
 class RNGTest extends WordSpec with MustMatchers {
@@ -34,6 +34,16 @@ class RNGTest extends WordSpec with MustMatchers {
     var rng: RNG = SimpleRNG(22)
     for(i <- 1 to 100000) {
       val (d,r) = RNG.double(rng)
+      assert(d >= 0.0)
+      assert(d < 1.0)
+      rng = r
+    }
+  }
+
+  "double via map produces a number between 0 and 1" in {
+    var rng:RNG = SimpleRNG(22)
+    for(i <- 1 to 10000) {
+      val (d,r) = state.RNG.doubleViaMap(rng)
       assert(d >= 0.0)
       assert(d < 1.0)
       rng = r
