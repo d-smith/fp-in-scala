@@ -68,6 +68,15 @@ class RNGTest extends WordSpec with MustMatchers {
     assert(d1 === d2)
   }
 
+  "double int via rand produces int double tuples" in {
+    var gen1: RNG = SimpleRNG(1)
+    var gen2: RNG = SimpleRNG(1)
+    val((d1,i1), _) = RNG.randIntDouble(gen1)
+    val((d2,i2), _) = RNG.randIntDouble(gen2)
+    assert(i1 === i2)
+    assert(d1 === d2)
+  }
+
   "int produces a list of random integers" in {
     var rng1: RNG = SimpleRNG(42)
     val rng2: RNG = SimpleRNG(42)
