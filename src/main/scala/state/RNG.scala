@@ -45,6 +45,7 @@ object RNG {
     ((d1, d2, d3), r3)
   }
 
+  //This numbers returned in the list are actually in reverse order of their generation... might be ok
   def ints(count: Int)(rng: RNG) : (List[Int], RNG) = {
     def go(n: Int, rng: RNG, l: List[Int]) : (List[Int], RNG) = {
       n match {
@@ -88,5 +89,13 @@ object RNG {
   val randIntDouble: Rand[(Int, Double)] = both(int,double)
 
   val randDoubleInt: Rand[(Double,Int)] = both(double,int)
+
+  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] =
+    fs.foldRight(unit(List[A]()))((elem, acc) => map2(elem,acc)(_::_))
+
+  //Sequence produces elements in order, so this will produce the same generated
+  //output as the non-sequence version of ints in reverse order wrt the original ints
+  def intsSeq(count: Int): Rand[List[Int]] =
+    sequence(List.fill(count)(int))
 
 }
