@@ -72,8 +72,20 @@ object RNG {
       (f(a), rng2)
     }
 
+  def flatMap[A,B](f:Rand[A])(g: A => Rand[B]) : Rand[B] =
+    rng => {
+      val(a,r) = f(rng)
+      g(a)(r)
+    }
+
+  def mapViaFlatmap[A,B](s: Rand[A])(f:A => B): Rand[B] =
+    flatMap(s)(a => unit(f(a)))
+
    val doubleViaMap: Rand[Double] =
     map(nonNegativeInt)(_ / (Int.MaxValue.toDouble + 1))
+
+  val doubleViaFlatMapMap: Rand[Double] =
+    mapViaFlatmap(nonNegativeInt)(_ / (Int.MaxValue.toDouble + 1))
 
   def map2[A,B,C](ra: Rand[A],rb:Rand[B])(f: (A,B) => C): Rand[C] = {
     rng => {
@@ -82,6 +94,9 @@ object RNG {
       (f(a,b), r2)
     }
   }
+
+  def map2ViaFlatMap[A,B,C](ra: Rand[A],rb:Rand[B])(f: (A,B) => C): Rand[C] =
+    flatMap(ra)(a => map(rb)(b => f(a,b)))
 
   def both[A,B](ra: Rand[A], rb: Rand[B]) : Rand[(A,B)] =
     map2(ra, rb)((_,_))

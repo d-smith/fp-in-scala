@@ -50,6 +50,16 @@ class RNGTest extends WordSpec with MustMatchers {
     }
   }
 
+  "double via mapViaFlatmap produces a number between 0 and 1" in {
+    var rng:RNG = SimpleRNG(22)
+    for(i <- 1 to 10000) {
+      val (d,r) = state.RNG.doubleViaFlatMapMap(rng)
+      assert(d >= 0.0)
+      assert(d < 1.0)
+      rng = r
+    }
+  }
+
   "int double produces int double tuples" in {
     var gen1: RNG = SimpleRNG(1)
     var gen2: RNG = SimpleRNG(1)
