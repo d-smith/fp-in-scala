@@ -14,4 +14,17 @@ class StateTest extends WordSpec with MustMatchers {
     val (i2,r2) = generator.run(r1)
     assert(i2 === 12)
   }
+
+  "ints map to strings" in {
+    
+    val gen1: State[RNG,Int] = State(s => s.nextInt)
+    val rng1: RNG = new SimpleRNG(1)
+
+    val (a,s) = gen1.run(rng1)
+
+    val gen2: State[RNG, String] = gen1.map[String](_+"")
+    val (a2, s2) = gen2.run(rng1)
+
+    assert(s"$a" === a2)
+  }
 }
