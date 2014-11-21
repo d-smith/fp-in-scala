@@ -16,7 +16,7 @@ class StateTest extends WordSpec with MustMatchers {
   }
 
   "ints map to strings" in {
-    
+
     val gen1: State[RNG,Int] = State(s => s.nextInt)
     val rng1: RNG = new SimpleRNG(1)
 
