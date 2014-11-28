@@ -50,4 +50,7 @@ object Par {
     val pas:List[Par[List[A]]] = as.map(asyncF((a: A) => if(f(a)) List(a) else List()))
     map(sequence(pas))(_.flatten)
   }
+
+  def equal[A](e:ExecutorService)(p1: Par[A], p2: Par[A]) : Boolean =
+    p1(e).get == p2(e).get
 }
