@@ -21,7 +21,10 @@ object Gen {
 
   def unit[A](a : => A) : Gen[A] = Gen(State.unit(a))
 
-  def listOfN[A](n: Int, a: Gen[A]) : Gen[List[A]] = ???
+  def boolean : Gen[Boolean] = Gen(State(RNG.boolean))
+
+  def listOfN[A](n: Int, a: Gen[A]) : Gen[List[A]] =
+    Gen(State.sequence(List.fill(n)(a.sample)))
 
   def forAll[A](a:Gen[A])(f: A => Boolean) : Prop = ???
 }

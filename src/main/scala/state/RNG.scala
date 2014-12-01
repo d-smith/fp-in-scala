@@ -17,6 +17,11 @@ object RNG {
     }
   }
 
+  def boolean(rng: RNG) : (Boolean, RNG) = {
+    val (i, r) = rng.nextInt
+    if(i < 0) (true,r) else (false,r)
+  }
+
   def nonNegativeInt(rng: RNG) : (Int, RNG) = {
     val (generated, generator) = rng.nextInt
     (if(generated < 0) -(1 + generated) else generated, generator)
@@ -137,4 +142,7 @@ object State {
 
   def unit[S,A](a:A):State[S,A] =
     State(s => (a,s))
+
+  def sequence[S,A](sas: List[State[S, A]]): State[S, List[A]] =
+    sas.foldRight(unit[S, List[A]](List()))((f,acc) => f.map2(acc)(_ :: _))
 }
