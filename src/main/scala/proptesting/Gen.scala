@@ -13,7 +13,9 @@ trait Prop {
   def check: Either[(FailedCase, SuccessCount), SuccessCount]
 }
 
-case class Gen[A](sample: State[RNG,A])
+case class Gen[A](sample: State[RNG,A]) {
+  def flatMap[B](f: A => Gen[B]) : Gen[B] = Gen(sample.flatMap(a => f(a).sample))
+}
 
 object Gen {
   def choose(start: Int, stopExclusive: Int) : Gen[Int] =
