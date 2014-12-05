@@ -29,8 +29,14 @@ object Gen {
 
   def boolean : Gen[Boolean] = Gen(State(RNG.boolean))
 
+  def double : Gen[Double] = Gen(State(RNG.double))
+
   def listOfN[A](n: Int, a: Gen[A]) : Gen[List[A]] =
     Gen(State.sequence(List.fill(n)(a.sample)))
 
   def forAll[A](a:Gen[A])(f: A => Boolean) : Prop = ???
+
+  def union[A](g1: Gen[A], g2: Gen[A]) : Gen[A] = boolean.flatMap(b => if(b) g1 else g2)
+
+  def weighted[A](g1:(Gen[A], Double), g2: (Gen[A], Double)) = ???
 }
