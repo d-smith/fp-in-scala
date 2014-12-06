@@ -38,5 +38,8 @@ object Gen {
 
   def union[A](g1: Gen[A], g2: Gen[A]) : Gen[A] = boolean.flatMap(b => if(b) g1 else g2)
 
-  def weighted[A](g1:(Gen[A], Double), g2: (Gen[A], Double)) = ???
+  def weighted[A](g1:(Gen[A], Double), g2: (Gen[A], Double)) = {
+    val pG1 = g1._2 / g1._2 + g2._2
+    Gen(State(RNG.double)flatMap(d => if(d >= pG1) g1._1.sample else g2._1.sample))
+  }
 }
