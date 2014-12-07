@@ -86,6 +86,14 @@ trait Stream[+A] {
       case _ => None
     }
 
+  def zip[B](s2: Stream[B]): Stream[(A,B)] =
+    zipWith(s2)((_,_))
+
+  def find(f: A => Boolean): Option[A] = this match {
+    case Empty => None
+    case Cons(h,t) => if((f(h()))) Some(h()) else t().find(f)
+  }
+
   def tails: Stream[Stream[A]] =
     unfold(this) {
       case Empty => None
