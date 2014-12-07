@@ -23,7 +23,21 @@ object Prop {
   type TestCases = Int
 }
 
-case class Prop(run: (TestCases, RNG) => Result)
+case class Prop(run: (TestCases, RNG) => Result) {
+  def &&(p: Prop) : Prop = Prop {
+    (n,rng) => run(n, rng) match {
+      case Passed => p.run(n,rng)
+      case f => f
+    }
+  }
+
+  def ||(p:Prop) : Prop = Prop {
+    (n,rng) => run(n, rng) match {
+      case _:Falsified => p.run(n,rng)
+      case p => p
+    }
+  }
+}
 
 case class Gen[A](sample: State[RNG,A]) {
   def flatMap[B](f: A => Gen[B]) : Gen[B] = Gen(sample.flatMap(a => f(a).sample))
