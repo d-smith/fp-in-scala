@@ -39,12 +39,18 @@ case class Prop(run: (TestCases, RNG) => Result) {
   }
 }
 
-case class Gen[A](sample: State[RNG,A]) {
+case class Gen[+A](sample: State[RNG,A]) {
+
+  def map[B](f: A => B): Gen[B] =
+    Gen(sample.map(f))
+
   def flatMap[B](f: A => Gen[B]) : Gen[B] = Gen(sample.flatMap(a => f(a).sample))
 
   def listOfN(n:Int): Gen[List[A]] = Gen.listOfN(n, this)
 
   def listOfN(size: Gen[Int]) : Gen[List[A]] = size.flatMap(n => listOfN(n))
+
+  def unsized: SGen[A] = SGen(_ => this)
 }
 
 object Gen {
@@ -82,4 +88,14 @@ object Gen {
     val pG1 = g1._2 / g1._2 + g2._2
     Gen(State(RNG.double)flatMap(d => if(d >= pG1) g1._1.sample else g2._1.sample))
   }
+
+
+}
+
+case class SGen[+A](g: Int => Gen[A]) {
+  def map[B](f:A => B): SGen[B] =
+    SGen(g andThen (_ map f))
+
+  def flatMap[B](f: A => Gen[B]) : SGen[B] =
+    SGen(g andThen (_ flatMap f))
 }
