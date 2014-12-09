@@ -26,6 +26,6 @@ class GenTest extends WordSpec with MustMatchers {
 
     val prop = Gen.forAll(listGen)(testFn)
 
-    assert(prop.run(10, rng1) === Passed)
+    assert(prop.run(10, 10, rng1) === Passed)
   }
 }

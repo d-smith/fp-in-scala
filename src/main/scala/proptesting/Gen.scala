@@ -1,6 +1,6 @@
 package proptesting
 
-import proptesting.Prop.{FailedCase, SuccessCount, TestCases}
+import proptesting.Prop.{MaxSize, FailedCase, SuccessCount, TestCases}
 import state.State
 import state.RNG
 import laziness.Stream
@@ -21,19 +21,28 @@ object Prop {
   type SuccessCount = Int
   type FailedCase = String
   type TestCases = Int
+  type MaxSize = Int
+
+  def run(p: Prop, maxSize: Int = 100, testCases:Int = 100,
+          rng: RNG = RNG.SimpleRNG(System.currentTimeMillis)) : Unit = {
+    p.run(maxSize, testCases, rng) match {
+      case Falsified(msg,n) => println(s"! Falsified after $n passed tests\n$msg")
+      case Passed => println(s"+ OK, passed $testCases tests.")
+    }
+  }
 }
 
-case class Prop(run: (TestCases, RNG) => Result) {
+case class Prop(run: (MaxSize,TestCases, RNG) => Result) {
   def &&(p: Prop) : Prop = Prop {
-    (n,rng) => run(n, rng) match {
-      case Passed => p.run(n,rng)
+    (max, n,rng) => run(max, n, rng) match {
+      case Passed => p.run(max, n,rng)
       case f => f
     }
   }
 
   def ||(p:Prop) : Prop = Prop {
-    (n,rng) => run(n, rng) match {
-      case _:Falsified => p.run(n,rng)
+    (max, n,rng) => run(max, n, rng) match {
+      case _:Falsified => p.run(max, n,rng)
       case p => p
     }
   }
@@ -67,7 +76,7 @@ object Gen {
     Gen(State.sequence(List.fill(n)(a.sample)))
 
   def forAll[A](as:Gen[A])(f: A => Boolean) : Prop = Prop {
-    (n, rng) => randomStream(as)(rng).zip(Stream.from(0)).take(n).map {
+    (max, n, rng) => randomStream(as)(rng).zip(Stream.from(0)).take(n).map {
       case(a,i) => try {
         if (f(a)) Passed else Falsified(a.toString,i)
       } catch { case e: Exception => Falsified(buildMsg(a,e), i) }
