@@ -83,6 +83,21 @@ object Gen {
     }.find(_.isFalsified).getOrElse(Passed)
   }
 
+  def forAll[A](g: SGen[A])(f: A => Boolean): Prop =
+    forAll(g(_))(f)
+
+  def forAll[A](g: Int => Gen[A])(f: A => Boolean): Prop = Prop {
+    (max,n,rng) =>
+      val casesPerSize = (n - 1) / max + 1
+      val props: Stream[Prop] =
+        Stream.from(0).take((n min max) + 1).map(i => forAll(g(i))(f))
+      val prop: Prop =
+        props.map(p => Prop { (max, n, rng) =>
+          p.run(max, casesPerSize, rng)
+        }).toList.reduce(_ && _)
+      prop.run(max,n,rng)
+  }
+
   def randomStream[A](gen: Gen[A])(rng: RNG) : Stream[A] =
     Stream.unfold(rng) { rng => Some(gen.sample.run(rng)) }
 
@@ -102,6 +117,8 @@ object Gen {
 }
 
 case class SGen[+A](g: Int => Gen[A]) {
+  def apply(n:Int) = g(n)
+
   def map[B](f:A => B): SGen[B] =
     SGen(g andThen (_ map f))
 
