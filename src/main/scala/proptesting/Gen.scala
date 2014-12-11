@@ -59,6 +59,11 @@ case class Gen[+A](sample: State[RNG,A]) {
 
   def listOfN(size: Gen[Int]) : Gen[List[A]] = size.flatMap(n => listOfN(n))
 
+  def listOf: SGen[List[A]] = Gen.listOf(this)
+  def listOf1: SGen[List[A]] = Gen.listOf1(this)
+
+
+
   def unsized: SGen[A] = SGen(_ => this)
 }
 
@@ -74,6 +79,12 @@ object Gen {
 
   def listOfN[A](n: Int, a: Gen[A]) : Gen[List[A]] =
     Gen(State.sequence(List.fill(n)(a.sample)))
+
+  def listOf[A](g: Gen[A]): SGen[List[A]] =
+    SGen(n => g.listOfN(n))
+
+  def listOf1[A](g: Gen[A]): SGen[List[A]] =
+    SGen(n => g.listOfN(n max 1))
 
   def forAll[A](as:Gen[A])(f: A => Boolean) : Prop = Prop {
     (max, n, rng) => randomStream(as)(rng).zip(Stream.from(0)).take(n).map {

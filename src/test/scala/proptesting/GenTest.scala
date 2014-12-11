@@ -28,4 +28,23 @@ class GenTest extends WordSpec with MustMatchers {
 
     assert(prop.run(10, 10, rng1) === Passed)
   }
+
+  "list max is greater than or equal to every other element" in {
+    import Gen._
+
+    val rng = RNG.SimpleRNG(12)
+    val smallInt = Gen.choose(-10,10)
+    val maxProp = forAll(listOf(smallInt)) { ns =>
+      val max = ns.max
+      !ns.exists(_ > max)
+    }
+
+    //Show output
+    Prop.run(maxProp, rng = rng)
+
+    //Now test - current iteration does not handle empty lists, so
+    //assert will come after checkin of next exercise.
+    println( maxProp.run(100,100,rng) )
+
+  }
 }
