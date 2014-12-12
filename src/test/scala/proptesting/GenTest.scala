@@ -34,7 +34,7 @@ class GenTest extends WordSpec with MustMatchers {
 
     val rng = RNG.SimpleRNG(12)
     val smallInt = Gen.choose(-10,10)
-    val maxProp = forAll(listOf(smallInt)) { ns =>
+    val maxProp = forAll(listOf1(smallInt)) { ns =>
       val max = ns.max
       !ns.exists(_ > max)
     }
@@ -44,7 +44,7 @@ class GenTest extends WordSpec with MustMatchers {
 
     //Now test - current iteration does not handle empty lists, so
     //assert will come after checkin of next exercise.
-    println( maxProp.run(100,100,rng) )
+    assert( maxProp.run(100,100,rng) === Passed)
 
   }
 }
