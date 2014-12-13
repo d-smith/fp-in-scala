@@ -42,9 +42,30 @@ class GenTest extends WordSpec with MustMatchers {
     //Show output
     Prop.run(maxProp, rng = rng)
 
-    //Now test - current iteration does not handle empty lists, so
-    //assert will come after checkin of next exercise.
     assert( maxProp.run(100,100,rng) === Passed)
 
   }
-}
+
+  "list sort can be verified" in {
+    import Gen._
+
+    def listIsSorted(l: List[Int]) : Boolean = {
+      l match {
+        case t :: Nil => true
+        case h :: t =>
+          val h2 = t.head
+          if(!(h <= h2)) false else listIsSorted(t)
+      }
+    }
+
+    val rng = RNG.SimpleRNG(12)
+    val smallInt = Gen.choose(-10,10)
+    val sortProp = forAll(listOf1(smallInt)) { ns =>
+      val sorted = ns.sorted
+      listIsSorted(sorted)
+    }
+
+    assert(sortProp.run(100,100,rng) === Passed)
+
+  }
+ }
