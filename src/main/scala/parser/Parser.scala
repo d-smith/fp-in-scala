@@ -16,5 +16,9 @@ trait Parsers[ParseError, Parser[+_]] { self =>
   case class ParserOps[A](p: Parser[A]) {
     def |[B>:A](p2: Parser[B]) : Parser[B] = self.or(p,p2)
     def or[B>:A](p2: => Parser[B]) : Parser[B] = self.or(p,p2)
+
+    def map[A,B](p: Parser[A])(f: A => Parser[B]) : Parser[B] = ???
+
+    def many[A](p: Parser[A]) : Parser[List[A]] = ???
   }
 }
