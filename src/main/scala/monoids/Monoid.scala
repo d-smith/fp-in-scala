@@ -13,7 +13,27 @@ object Monoid {
   }
 
   def listMonoid[A] = new Monoid[List[A]] {
-    def op(a1: List[A], a2: List[A]) : List[A] = a1 ++ a2
+    def op(a1: List[A], a2: List[A])  = a1 ++ a2
     def zero = Nil
+  }
+
+  val intAddition: Monoid[Int] = new Monoid[Int] {
+    def zero: Int = 0
+    def op(a1: Int, a2: Int): Int = a1 + a2
+  }
+
+  val intMultiplication: Monoid[Int] = new Monoid[Int] {
+    def zero: Int = 1
+    def op(a1: Int, a2: Int): Int = a1 * a2
+  }
+
+  val booleanOr: Monoid[Boolean] = new Monoid[Boolean] {
+    def zero: Boolean = false
+    def op(a1: Boolean, a2: Boolean): Boolean = a1 || a2
+  }
+
+  val booleanAnd: Monoid[Boolean] = new Monoid[Boolean] {
+    def zero: Boolean = true
+    def op(a1: Boolean, a2: Boolean) : Boolean = a1 && a2
   }
 }
