@@ -3,6 +3,10 @@ package monoids
 import org.scalatest.WordSpec
 import org.scalatest.matchers.MustMatchers
 
+/**
+ * Tests in this class check the monoid laws - associativity of the op and the use of
+ * zero in op that provides identity
+ */
 class MonoidTest extends WordSpec with MustMatchers {
 
   "the string monoid obeys the monoid laws" in {
