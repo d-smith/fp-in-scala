@@ -36,4 +36,14 @@ object Monoid {
     def zero: Boolean = true
     def op(a1: Boolean, a2: Boolean) : Boolean = a1 && a2
   }
+
+  def optionMonoid[A]:  Monoid[Option[A]] = new Monoid[Option[A]] {
+    override def zero: Option[A] = None
+    override def op(a1: Option[A], a2: Option[A]): Option[A] = a1.orElse(a2)
+  }
+
+  def endoMonoid[A]: Monoid[A => A] = new Monoid[(A) => A] {
+    override def zero: (A) => A = (a:A) => a
+    override def op(a1: (A) => A, a2: (A) => A): (A) => A = a1.compose(a2)
+  }
 }

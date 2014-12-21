@@ -2,6 +2,8 @@ package monoids
 
 import org.scalatest.WordSpec
 import org.scalatest.matchers.MustMatchers
+import monoids.Monoid._
+import scala.Some
 
 /**
  * Tests in this class check the monoid laws - associativity of the op and the use of
@@ -61,5 +63,32 @@ class MonoidTest extends WordSpec with MustMatchers {
     assert(op(true, zero) === true)
   }
 
+  "the option monoid obeys the Monadic laws" in {
+    import Monoid.optionMonoid
+
+    val x = Some(1)
+    val y = Some(2)
+    val z = Some(3)
+
+    assert(optionMonoid[Int].op(optionMonoid[Int].op(x,y),z) === optionMonoid[Int].op(x,optionMonoid[Int].op(y,z)))
+    assert(optionMonoid[Int].op(x, optionMonoid[Int].zero) === x)
+  }
+
+  "the endo monoid obeys the monadic laws" in {
+    import Monoid.endoMonoid
+
+    val x = (a: Int) => a + 1
+    val y = (a: Int) => a + 2
+    val z = (a: Int) => a + 3
+
+    val em1 = endoMonoid[Int].op(endoMonoid[Int].op(x,y),z)
+    val em2 = endoMonoid[Int].op(x,endoMonoid[Int].op(y,z))
+
+    assert(em1(2) === em2(2))
+
+    val em3 = endoMonoid[Int].op(x, (a:Int) => a)
+    val em4 = endoMonoid[Int].op(x, endoMonoid[Int].zero)
+    assert(em3(2) === em4(2))
+  }
 
 }
