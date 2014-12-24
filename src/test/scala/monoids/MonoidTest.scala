@@ -91,4 +91,15 @@ class MonoidTest extends WordSpec with MustMatchers {
     assert(em3(2) === em4(2))
   }
 
+  "the wc monoid obeys the monoid laws" in {
+    import wcMonoid._
+
+    val s1 = Stub("foo")
+    var s2 = Stub("bar")
+    var s3 = Stub("baz")
+
+    assert(op(op(s1,s2), s3) === op(s1, op(s2,s3)))
+    assert(op(s1, zero) === s1)
+  }
+
 }

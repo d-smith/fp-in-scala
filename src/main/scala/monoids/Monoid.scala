@@ -60,4 +60,18 @@ object Monoid {
         m.op(foldMapV(p1,m)(f), foldMapV(p2,m)(f))
     }
   }
+
+  sealed trait WC
+  case class Stub(chars: String) extends WC
+  case class Part(lStub: String, words: Int, rStub: String) extends WC
+
+  val wcMonoid: Monoid[WC] = new Monoid[WC] {
+    def zero = Stub("")
+    def op(a: WC, b: WC) : WC = (a,b) match {
+      case (Stub(s1),Stub(s2)) => Stub(s1 + s2)
+      case (Stub(s), Part(l,w,r)) => Part(l + s, w, r)
+      case (Part(l,w,r), Stub(s)) => Part(l,w, r + s)
+      case (Part(l1,w1,r1), Part(l2,w2,r2)) => Part(l1,w1 + (if((r1 + l2).isEmpty) 0 else 1),r2)
+    }
+  }
 }
