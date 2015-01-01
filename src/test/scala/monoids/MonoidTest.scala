@@ -102,4 +102,20 @@ class MonoidTest extends WordSpec with MustMatchers {
     assert(op(s1, zero) === s1)
   }
 
+  "toList on an option foldable" in {
+    import OptionFoldable._
+    val thing1 = Some(123)
+    val thing2 = None
+    assert(OptionFoldable.toList(thing1) === List(123))
+    assert(OptionFoldable.toList(thing2) === List())
+  }
+
+  "toList on the list foldable returns the original list" in {
+    import ListFoldable._
+
+    val aList = List(1,2,3)
+    assert(ListFoldable.toList(aList) === aList)
+    assert(ListFoldable.toList(List("")) === List(""))
+  }
+
 }
