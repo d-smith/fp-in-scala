@@ -25,4 +25,9 @@ trait Applicative[F[_]] extends Functor[F] {
   def replicateM[A](n:Int, fa:F[A]) : F[List[A]] =
     sequence(List.fill(n)(fa))
 
+  def map3[A,B,C,D](fa: F[A],
+                    fb: F[B],
+                    fc: F[C])(f: (A, B, C) => D): F[D] =
+    apply(apply(apply(unit(f.curried))(fa))(fb))(fc)
+
 }
