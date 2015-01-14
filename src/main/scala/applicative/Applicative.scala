@@ -35,6 +35,17 @@ trait Applicative[F[_]] extends Functor[F] {
 
 }
 
+object Applicative {
+  val streamApplicative = new Applicative[Stream] {
+    override def unit[A](a: => A): Stream[A] =
+      Stream.continually(a)
+
+    override def map2[A,B,C](a: Stream[A], b: Stream[B])(f: (A,B) => C) =
+      (a.zip(b)).map(f.tupled)
+
+  }
+}
+
 trait Monad[F[_]] extends Applicative[F] {
   def flatMap[A,B](fa:F[A])(f: A => F[B]) : F[B] = join(map(fa)(f))
 
