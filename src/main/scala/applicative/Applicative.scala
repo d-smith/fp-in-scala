@@ -35,6 +35,12 @@ trait Applicative[F[_]] extends Functor[F] {
 
 }
 
+sealed trait Validation[+E,+A]
+
+case class Failure[E](head: E, tail: Vector[E] = Vector()) extends Validation[E,Nothing]
+case class Success[A](a: A) extends Validation[Nothing,A]
+
+
 object Applicative {
   val streamApplicative = new Applicative[Stream] {
     override def unit[A](a: => A): Stream[A] =
@@ -44,6 +50,18 @@ object Applicative {
       (a.zip(b)).map(f.tupled)
 
   }
+
+  def validationApplicative[E]: Applicative[({type f[x] = Validation[E,x]})#f] =
+    new Applicative[({type f[x] = Validation[E,x]})#f] {
+      def unit[A](a: => A) = Success(a)
+      override def map2[A,B,C](fa: Validation[E,A], fb: Validation[E,B])(f:(A,B) => C) =
+        (fa, fb) match {
+          case (Success(a), Success(b)) => Success(f(a,b))
+          case (Failure(h1,t1),Failure(h2,t2)) => Failure(h1, t1 ++ Vector(h1) ++ t2)
+          case (f@Failure(_,_), _) => f
+          case (_, f@Failure(_,_)) => f
+        }
+    }
 }
 
 trait Monad[F[_]] extends Applicative[F] {
@@ -59,4 +77,15 @@ trait Monad[F[_]] extends Applicative[F] {
 
   override def map2[A,B,C](fa: F[A], fb:F[B])(f:(A,B) => C) : F[C] =
     flatMap(fa)(a => map(fb)(b => f(a,b)))
+}
+
+object Monad {
+  def eitherMonad[E]: Monad[({type f[x] = Either[E,x]})#f] =
+    new Monad[({type f[x] = Either[E,x]})#f] {
+      override def unit[A](a: => A): Either[E, A] = Right(a)
+      override def flatMap[A,B](ea: Either[E,A])(f: A => Either[E,B]) = ea match {
+        case Right(a) => f(a)
+        case Left(b) => Left(b)
+      }
+    }
 }
