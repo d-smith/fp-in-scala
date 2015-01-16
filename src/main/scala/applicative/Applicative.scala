@@ -33,6 +33,16 @@ trait Applicative[F[_]] extends Functor[F] {
   def map4[A,B,C,D,E](fa: F[A], fb: F[B], fc: F[C], fd: F[D])(f:(A,B,C,D) => E) : F[E] =
     apply(apply(apply(apply(unit(f.curried))(fa))(fb))(fc))(fd)
 
+  def product[G[_]](G: Applicative[G]): Applicative[({type f[x] = (F[x], G[x])})#f] = {
+    val self = this
+    new Applicative[({type f[x] = (F[x], G[x])})#f] {
+      override def unit[A](a: => A): (F[A], G[A]) = (self.unit(a), G.unit(a))
+
+      override def apply[A, B](fab: (F[(A) => B], G[(A) => B]))(fa: (F[A], G[A])): (F[B], G[B]) =
+        (self.apply(fab._1)(fa._1),G.apply(fab._2)(fa._2))
+    }
+  }
+
 }
 
 sealed trait Validation[+E,+A]
