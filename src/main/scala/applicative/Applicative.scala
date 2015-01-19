@@ -1,6 +1,7 @@
 package applicative
 
 import monads.Functor
+import monoids.Foldable
 
 
 trait Applicative[F[_]] extends Functor[F] {
@@ -21,6 +22,12 @@ trait Applicative[F[_]] extends Functor[F] {
 
   def sequence[A](fas:List[F[A]]) : F[List[A]] =
     traverse(fas)(fa => fa)
+
+  def sequenceMap[K,V](ma:Map[K,F[V]]) : F[Map[K,V]] =
+    ma.foldLeft(unit(Map[K,V]())){
+      case (acc,(k,fv)) => apply(map(acc)(m =>
+        (n:Map[K,V]) => m ++ n))(map(fv)((v:V) => Map(k -> v)))
+    }
 
   def replicateM[A](n:Int, fa:F[A]) : F[List[A]] =
     sequence(List.fill(n)(fa))
@@ -43,6 +50,14 @@ trait Applicative[F[_]] extends Functor[F] {
     }
   }
 
+}
+
+trait Traverse[F[_]] extends Functor[F] with Foldable[F] {
+  def traverse[G[_]: Applicative,A,B](fa:F[A])(f: A => G[B]):G[F[B]] =
+    sequence(map(fa)(f))
+
+  def sequence[G[_]:Applicative,A](fga:F[G[A]]) : G[F[A]] =
+    traverse(fga)(ga => ga)
 }
 
 sealed trait Validation[+E,+A]
