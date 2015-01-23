@@ -32,3 +32,6 @@ object Converter {
   } yield()
 }
 
+object MyConverterApp extends App {
+  Converter.converter.run
+}
