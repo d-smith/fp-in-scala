@@ -19,9 +19,14 @@ object IO extends Monad[IO] {
 }
 
 object Converter {
+  import IO._
   def ReadLine: IO[String] = IO { readLine }
   def PrintLine(msg: String): IO[Unit] = IO { println(msg)}
 
+  def echo = ReadLine.flatMap(PrintLine)
+
+  val readInt:IO[Int] = ReadLine.map(_.toInt)
+  val readInts:IO[(Int,Int)]  = **(readInt,readInt)
 
   def fahrenheitToCelsius(f: Double) : Double = (f - 32) * 5.0/9.0
 
